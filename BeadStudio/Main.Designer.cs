@@ -78,6 +78,8 @@
             this.pictureBox_Colors.TabIndex = 10;
             this.pictureBox_Colors.TabStop = false;
             this.pictureBox_Colors.Click += new System.EventHandler(this.pictureBox_Colors_Click);
+            this.pictureBox_Colors.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox_Colors_MouseDoubleClick);
+            this.pictureBox_Colors.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_Colors_MouseDown);
             // 
             // print_btn
             // 
@@ -130,6 +132,8 @@
             this.pictureBoxImg.TabIndex = 0;
             this.pictureBoxImg.TabStop = false;
             this.pictureBoxImg.Click += new System.EventHandler(this.pictureBoxImg_Click);
+            this.pictureBoxImg.DragDrop += new System.Windows.Forms.DragEventHandler(this.pictureBoxImg_DragDrop);
+            this.pictureBoxImg.DragEnter += new System.Windows.Forms.DragEventHandler(this.pictureBoxImg_DragEnter);
             this.pictureBoxImg.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxImg_Paint);
             // 
             // openFileDialog
