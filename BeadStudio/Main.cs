@@ -28,6 +28,7 @@ namespace BeadStudio
         Bitmap currentPixelatedBitmap;
         Bitmap currentPixelatedColorMappedBitmap;
         Bitmap currentPixelatedColorMappedBitmapWithGridlines;
+        Bitmap current10x30ColorBoxImage;
 
         bool eventInQueue = false;      
 
@@ -63,23 +64,24 @@ namespace BeadStudio
         private void GetFullSizeImage(string file)
         {
 
-
-            using (Stream BitmapStream = System.IO.File.Open(file, System.IO.FileMode.Open))
+            if (file != null)
             {
-                Image img = Image.FromStream(BitmapStream);
+                using (Stream BitmapStream = System.IO.File.Open(file, System.IO.FileMode.Open))
+                {
+                    Image img = Image.FromStream(BitmapStream);
 
-                Bitmap mBitmap = new Bitmap(img);
-                //mBitmap = Helpers.ResizeImage(mBitmap, width, height);
-                FileInfo fi = new FileInfo(file);
-                mBitmap.Tag = fi.Name;
-                currentFullSizeBitmap = mBitmap;
-                current28x28SizeBitmap = currentFullSizeBitmap.ResizeImage(28, 28);
-                currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280,280);
-                currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray,280,280);
-                currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
+                    Bitmap mBitmap = new Bitmap(img);
+                    //mBitmap = Helpers.ResizeImage(mBitmap, width, height);
+                    FileInfo fi = new FileInfo(file);
+                    mBitmap.Tag = fi.Name;
+                    currentFullSizeBitmap = mBitmap;
+                    current28x28SizeBitmap = currentFullSizeBitmap.ResizeImage(28, 28);
+                    currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280, 280);
+                    currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray, 280, 280);
+                    currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
+                }
+
             }
-
-
 
 
 
@@ -196,8 +198,8 @@ namespace BeadStudio
              
             }
 
-
-            pictureBox_Colors.Image = mBitmap.Pixelate(colorArray, 180, 600);
+            current10x30ColorBoxImage = mBitmap;
+            pictureBox_Colors.Image = current10x30ColorBoxImage.Pixelate(colorArray, 180, 600);
             //pictureBox_Colors.SizeMode = PictureBoxSizeMode.AutoSize;
         }
 
@@ -261,6 +263,7 @@ namespace BeadStudio
             eventInQueue = true;
             this.Refresh();
         }
+       
 
 
         private void print_btn_Click(object sender, EventArgs e)
@@ -287,7 +290,53 @@ namespace BeadStudio
             e.Graphics.DrawImage(pictureBoxImg.Image, 0, 0);
 
         }
+
+
+
+
+
         private void pictureBox_Colors_Click(object sender, EventArgs e)
+        {
+            //var openFileDialog = new OpenFileDialog();
+            //openFileDialog.Filter = "PALLET File (.pallet)|*.pallet";
+
+            //using (openFileDialog)
+            //{
+            //    if (openFileDialog.ShowDialog() == DialogResult.OK)
+            //    {
+            //        var file = openFileDialog.FileName;
+                   
+            //        var lines = File.ReadAllLines(file).Select(a => a.Split(',')).ToArray();
+
+            //        Color[] _ColorArray = new Color[lines.Count()+1]; // plus 1 since we alway sadd a transparent color
+        
+            //        for (int i = 0; i < lines.Count(); i++)
+            //        {
+
+            //            int a = int.Parse(lines[i][0]);
+            //            int r = int.Parse(lines[i][1]);
+            //            int g = int.Parse(lines[i][2]);
+            //            int b = int.Parse(lines[i][3]);
+
+                        
+            //            _ColorArray[i] = Color.FromArgb(a, r, g, b);
+            //        }
+            //        _ColorArray[lines.Count()] = Color.Transparent;
+
+            //        ColorArray = _ColorArray;
+            //        FillColorBox(ColorArray);
+
+            //    }
+            //}
+
+            //GetFullSizeImage(currentfile);
+            //eventInQueue = true;
+            //this.Refresh();
+            //// reload & set image data
+
+            //// HERE WE WOULD LOAD AND PROCESS A COLOR FILE
+        }
+        private void pictureBox_Colors_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             var openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "PALLET File (.pallet)|*.pallet";
@@ -297,11 +346,11 @@ namespace BeadStudio
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     var file = openFileDialog.FileName;
-                   
+
                     var lines = File.ReadAllLines(file).Select(a => a.Split(',')).ToArray();
 
-                    Color[] _ColorArray = new Color[lines.Count()+1]; // plus 1 since we alway sadd a transparent color
-        
+                    Color[] _ColorArray = new Color[lines.Count() + 1]; // plus 1 since we alway sadd a transparent color
+
                     for (int i = 0; i < lines.Count(); i++)
                     {
 
@@ -310,7 +359,7 @@ namespace BeadStudio
                         int g = int.Parse(lines[i][2]);
                         int b = int.Parse(lines[i][3]);
 
-                        
+
                         _ColorArray[i] = Color.FromArgb(a, r, g, b);
                     }
                     _ColorArray[lines.Count()] = Color.Transparent;
@@ -330,15 +379,124 @@ namespace BeadStudio
         }
         private void pictureBoxImg_Click(object sender, EventArgs e)
         {
-            // TO BE IMPLEMENTED VIA DRAG AND DROP
+            //// TO BE IMPLEMENTED VIA DRAG AND DROP
             //if (_currentState == CurrentState.Gridlines)
             //{
             //    MouseEventArgs me = (MouseEventArgs)e;
             //    Point coordinates = me.Location;
 
-            //    Color _Color = currentPixelatedColorMappedBitmap.GetPixel(coordinates.X, coordinates.Y);
+            //    var ratio_x = (double)((double)28 / pictureBoxImg.Size.Width);
+            //    var small_x = (ratio_x * coordinates.X);
+
+
+            //    var ratio_y = (double)((double)28 / pictureBoxImg.Size.Height);
+            //    var small_y = (ratio_y * coordinates.Y);
+
+            //    var _x = (int) Math.Truncate(small_x);
+            //    var _y = (int) Math.Truncate(small_y);
+
+            //    Color _Color = current28x28SizeBitmap.GetPixel(_x, _y);
             //}
         }
+
+        // DRAG N DROP AREA
+        private void pictureBox_Colors_MouseDown(object sender, MouseEventArgs e)
+        {
+            pictureBoxImg.AllowDrop = true;
+            // TO BE IMPLEMENTED VIA DRAG AND DROP
+            if (_currentState == CurrentState.Gridlines)
+            {
+                MouseEventArgs me = (MouseEventArgs)e;
+                Point coordinates = me.Location;
+
+                
+
+                var ratio_x = (double)((double)9 / pictureBox_Colors.Size.Width);
+                var small_x = (ratio_x * coordinates.X);
+
+
+                var ratio_y = (double)((double)30 / pictureBox_Colors.Size.Height);
+                var small_y = (ratio_y * coordinates.Y);
+
+                var _x = (int)Math.Truncate(small_x);
+                var _y = (int)Math.Truncate(small_y);
+
+                 Color _Color = current10x30ColorBoxImage.GetPixel(_x, _y);
+
+
+                if (e.Button == MouseButtons.Left)
+                    pictureBox_Colors.DoDragDrop(string.Format("{0},{1},{2},{3}",_Color.A, _Color.R, _Color.G, _Color.B), DragDropEffects.All);
+                
+            }
+        }
+        private void pictureBoxImg_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.Text))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+
+        }
+        private void pictureBoxImg_DragDrop(object sender, DragEventArgs e)
+        {
+
+            string points = e.Data.GetData(DataFormats.Text).ToString();
+            string[] items = points.Split(',');
+
+            int a = int.Parse(items[0]);
+            int r = int.Parse(items[1]);
+            int g = int.Parse(items[2]);
+            int b = int.Parse(items[3]);
+
+
+           var _newColor = Color.FromArgb(a, r, g, b);
+            // AT THIS POINT WE HAVE TRANSFERRED OUR COLOR OVER
+            // NOW TIME TO GET THE DESTINATION PIXEL
+
+
+            //MouseEventArgs me = (MouseEventArgs)e;
+            Point clientPoint = pictureBoxImg.PointToClient(new Point(e.X, e.Y));
+            Point coordinates = clientPoint;
+
+            var ratio_x = (double)((double)28 / pictureBoxImg.Size.Width);
+            var small_x = (ratio_x * coordinates.X);
+
+
+            var ratio_y = (double)((double)28 / pictureBoxImg.Size.Height);
+            var small_y = (ratio_y * coordinates.Y);
+
+            var _x = (int)Math.Truncate(small_x);
+            var _y = (int)Math.Truncate(small_y);
+
+            Color _Color = current28x28SizeBitmap.GetPixel(_x, _y);
+
+
+
+            // don't like having to do this all over again. Need a function for this.
+            current28x28SizeBitmap.SetPixel(_x, _y, _newColor);
+            currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280, 280);
+            currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray, 280, 280);
+            currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
+
+
+
+            eventInQueue = true;
+            this.Refresh();
+
+
+
+
+
+
+
+
+
+        }
+        // END DRAG N DROP
+    
+
+
+
         #endregion
 
 
