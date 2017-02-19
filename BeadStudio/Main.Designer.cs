@@ -37,6 +37,7 @@
             this.Load_Picture = new System.Windows.Forms.Button();
             this.pictureBoxImg = new System.Windows.Forms.PictureBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.btn_Save = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -56,6 +57,7 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.splitContainer1.Panel1.Controls.Add(this.btn_Save);
             this.splitContainer1.Panel1.Controls.Add(this.pictureBox_Colors);
             this.splitContainer1.Panel1.Controls.Add(this.print_btn);
             this.splitContainer1.Panel1.Controls.Add(this.checkBox_Gridlines);
@@ -141,6 +143,16 @@
             // 
             this.openFileDialog.FileName = "openFileDialog";
             // 
+            // btn_Save
+            // 
+            this.btn_Save.Location = new System.Drawing.Point(26, 932);
+            this.btn_Save.Name = "btn_Save";
+            this.btn_Save.Size = new System.Drawing.Size(174, 45);
+            this.btn_Save.TabIndex = 11;
+            this.btn_Save.Text = "Save";
+            this.btn_Save.UseVisualStyleBackColor = true;
+            this.btn_Save.Click += new System.EventHandler(this.btn_Save_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -173,6 +185,7 @@
         private System.Windows.Forms.CheckBox checkBox_Gridlines;
         private System.Windows.Forms.Button print_btn;
         private System.Windows.Forms.PictureBox pictureBox_Colors;
+        private System.Windows.Forms.Button btn_Save;
     }
 }
 
