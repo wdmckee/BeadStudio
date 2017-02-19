@@ -54,6 +54,10 @@ namespace BeadStudio
             // THESE ARE OUR BASE COLORS
             
         };
+
+        List<int[]> Selection = new List<int[]>();
+
+
         #endregion
 
         #region Properties
@@ -398,6 +402,42 @@ namespace BeadStudio
             //    Color _Color = current28x28SizeBitmap.GetPixel(_x, _y);
             //}
         }
+        private void pictureBoxImg_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && Control.ModifierKeys == Keys.Shift)
+            {
+                MouseEventArgs me = (MouseEventArgs)e;
+                Point coordinates = me.Location;
+
+
+                var ratio_x = (double)((double)28 / pictureBoxImg.Size.Width);
+                var small_x = (ratio_x * coordinates.X);
+
+
+                var ratio_y = (double)((double)28 / pictureBoxImg.Size.Height);
+                var small_y = (ratio_y * coordinates.Y);
+
+                var _x = (int)Math.Truncate(small_x);
+                var _y = (int)Math.Truncate(small_y);
+
+                Selection.Add(new int[] { _x,_y});
+
+
+                // MARK PIXEL GRAY FOR NOW
+                // don't like having to do this all over again. Need a function for this.
+                current28x28SizeBitmap.SetPixel(_x, _y, Color.Gray);
+                currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280, 280);
+                currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray, 280, 280);
+                currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
+
+                eventInQueue = true;
+                this.Refresh();
+
+
+
+
+            }
+        }
 
         // DRAG N DROP AREA
         private void pictureBox_Colors_MouseDown(object sender, MouseEventArgs e)
@@ -424,10 +464,43 @@ namespace BeadStudio
                  Color _Color = current10x30ColorBoxImage.GetPixel(_x, _y);
 
 
-                if (e.Button == MouseButtons.Left)
-                    pictureBox_Colors.DoDragDrop(string.Format("{0},{1},{2},{3}",_Color.A, _Color.R, _Color.G, _Color.B), DragDropEffects.All);
+                if (e.Button == MouseButtons.Left && Selection.Count() == 0)
+                {
+                    pictureBox_Colors.DoDragDrop(string.Format("{0},{1},{2},{3}", _Color.A, _Color.R, _Color.G, _Color.B), DragDropEffects.All);
+                }
+                else
+                {
+                    foreach (var points in Selection)
+                    {
+                        // don't like having to do this all over again. Need a function for this.
+                        current28x28SizeBitmap.SetPixel(points[0], points[1], _Color);
+                     
+                    }
+                    Selection.Clear();
+                    currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280, 280);
+                    currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray, 280, 280);
+                    currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
+                    eventInQueue = true;
+                    this.Refresh();
+
+                }
                 
+
+
+
             }
+
+
+
+           
+
+
+
+
+
+
+
+
         }
         private void pictureBoxImg_DragEnter(object sender, DragEventArgs e)
         {
@@ -477,9 +550,7 @@ namespace BeadStudio
             currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280, 280);
             currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray, 280, 280);
             currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
-
-
-
+            
             eventInQueue = true;
             this.Refresh();
 

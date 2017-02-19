@@ -135,6 +135,7 @@
             this.pictureBoxImg.DragDrop += new System.Windows.Forms.DragEventHandler(this.pictureBoxImg_DragDrop);
             this.pictureBoxImg.DragEnter += new System.Windows.Forms.DragEventHandler(this.pictureBoxImg_DragEnter);
             this.pictureBoxImg.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxImg_Paint);
+            this.pictureBoxImg.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBoxImg_MouseClick);
             // 
             // openFileDialog
             // 
