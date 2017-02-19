@@ -79,10 +79,14 @@ namespace BeadStudio
                     FileInfo fi = new FileInfo(file);
                     mBitmap.Tag = fi.Name;
                     currentFullSizeBitmap = mBitmap;
-                    current28x28SizeBitmap = currentFullSizeBitmap.ResizeImage(28, 28);
-                    currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280, 280);
-                    currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray, 280, 280);
-                    currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
+
+
+                        current28x28SizeBitmap = currentFullSizeBitmap.ResizeImage(28, 28);
+                        currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280, 280);
+                        currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray, 280, 280);
+                        currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
+                
+
                 }
 
             }
@@ -564,9 +568,27 @@ namespace BeadStudio
 
         }
         // END DRAG N DROP
-    
 
 
+        private void btn_Save_Click(object sender, EventArgs e)
+        {
+
+
+            //using (var fbd = new FolderBrowserDialog())
+            //{
+            //    DialogResult result = fbd.ShowDialog();
+
+            //    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            //    {
+                    current28x28SizeBitmap.Save(currentfile);
+                    
+            //    }
+            //}
+
+
+
+
+        }
 
         #endregion
 
