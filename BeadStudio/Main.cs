@@ -81,11 +81,9 @@ namespace BeadStudio
                     currentFullSizeBitmap = mBitmap;
 
 
-                        current28x28SizeBitmap = currentFullSizeBitmap.ResizeImage(28, 28);
-                        currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280, 280);
-                        currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray, 280, 280);
-                        currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
-                
+                    RefreshImage(true);
+
+
 
                 }
 
@@ -96,7 +94,35 @@ namespace BeadStudio
 
 
         }
+        private void RefreshImage(bool loadFull = false)
+        {
 
+            if (currentFullSizeBitmap.Size == new Size(28, 28))
+            {
+                current28x28SizeBitmap = currentFullSizeBitmap;
+                currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280, 280);
+                currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray, 280, 280);
+                currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
+            }
+            if (currentFullSizeBitmap.Size != new Size(28, 28) && loadFull == true)
+            {
+                current28x28SizeBitmap = currentFullSizeBitmap.ResizeImage(28, 28);
+                currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280, 280);
+                currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray, 280, 280);
+                currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
+            }
+            if (currentFullSizeBitmap.Size != new Size(28, 28) && loadFull == false)
+            {
+               
+                currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280, 280);
+                currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray, 280, 280);
+                currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
+            }
+
+
+            eventInQueue = true;
+            this.Refresh();
+        }
         #endregion
         
         #region EVENT CLICKS
@@ -430,12 +456,7 @@ namespace BeadStudio
                 // MARK PIXEL GRAY FOR NOW
                 // don't like having to do this all over again. Need a function for this.
                 current28x28SizeBitmap.SetPixel(_x, _y, Color.Gray);
-                currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280, 280);
-                currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray, 280, 280);
-                currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
-
-                eventInQueue = true;
-                this.Refresh();
+                RefreshImage();
 
 
 
@@ -481,11 +502,7 @@ namespace BeadStudio
                      
                     }
                     Selection.Clear();
-                    currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280, 280);
-                    currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray, 280, 280);
-                    currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
-                    eventInQueue = true;
-                    this.Refresh();
+                    RefreshImage();
 
                 }
                 
@@ -551,12 +568,7 @@ namespace BeadStudio
 
             // don't like having to do this all over again. Need a function for this.
             current28x28SizeBitmap.SetPixel(_x, _y, _newColor);
-            currentPixelatedBitmap = current28x28SizeBitmap.Pixelate(null, 280, 280);
-            currentPixelatedColorMappedBitmap = current28x28SizeBitmap.Pixelate(ColorArray, 280, 280);
-            currentPixelatedColorMappedBitmapWithGridlines = currentPixelatedColorMappedBitmap.DrawGridlines();
-            
-            eventInQueue = true;
-            this.Refresh();
+            RefreshImage();
 
 
 
